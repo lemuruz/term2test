@@ -24,7 +24,7 @@ class testUserPlayPoll(StaticLiveServerTestCase):
         dogBtn = self.browser.find_element(By.ID, "dogBtn")
         catBtn.is_displayed()
         dogBtn.is_displayed()
-        # ปาร์คกด หมา
+        # ปาร์คกด หมา และกด submit
         dogBtn.click()
         # ปาร์คเห็นว่า หน้าเว็บเปลี่ยนไปและมีขึ้นว่า แมว => 11 หมา => 8
         catScore = self.browser.find_element(By.ID, "cat")

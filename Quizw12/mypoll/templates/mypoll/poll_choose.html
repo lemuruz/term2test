@@ -12,7 +12,7 @@
         {% for choice in choices %}
             <label>
                 <input type="radio" name="choice" value="{{ choice.name }}">
-                {{ choice.name }} ({{ choice.vote_count }} votes)
+                {{ choice.name }}
             </label><br>
         {% endfor %}
         <button type="submit">Submit Vote</button>

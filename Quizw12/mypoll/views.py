@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from .models import Choice,Poll
@@ -7,9 +7,10 @@ def index(request):
     return render(request,"mypoll/poll_index.html",{'polls' : polls})
 
 def vote_page(request,poll_id):
-    poll = get_object_or_404(Poll, id=poll_id)  # Get the poll by ID
+    poll = get_object_or_404(Poll, id=poll_id)
     choices = Choice.objects.filter(poll=poll)
-    return render(request,"mypoll/poll_choose.html",{'choices' : choices})
+    return render(request,"mypoll/poll_choose.html",{'poll' : poll,
+                                                    'choices' : choices})
 
 def vote(request):
     if request.method == "POST":
@@ -17,5 +18,11 @@ def vote(request):
         choice = get_object_or_404(Choice, name=choice_name)
         choice.vote_count += 1
         choice.save()
-        return JsonResponse({"message": "Vote counted!", "votes": choice.vote_count})
+        return redirect('mypoll:result', poll_id=choice.poll.id)
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+def result(request,poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+    choices = Choice.objects.filter(poll=poll)
+    return render(request,"mypoll/poll_result.html",{'poll' : poll,
+                                                    'choices' : choices})
