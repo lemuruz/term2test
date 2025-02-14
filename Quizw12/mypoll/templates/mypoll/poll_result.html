@@ -9,7 +9,7 @@
     <button onclick="window.location.href='{% url 'mypoll:index'%}'">Home</button>
     <h1>{{ poll.name }}</h1>
     {% for choice in choices %}
-        <label>
+        <label id = "{{choice.name}}">
             {{ choice.name }} ({{ choice.vote_count}})
         </label><br>
     {% endfor %}

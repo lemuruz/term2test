@@ -9,7 +9,7 @@
     {% if polls %}
         <ul>
         {% for poll in polls %}
-            <a href = "{% url 'mypoll:votepage' poll.id %}" id = {poll.name}>{{poll.id}}. {{poll.name}}</a>
+            <a href = "{% url 'mypoll:votepage' poll.id %}" id = "{{ poll.name }}">{{poll.id}}. {{poll.name}}</a>
         {% endfor%}
         </ul>
     {% else %}

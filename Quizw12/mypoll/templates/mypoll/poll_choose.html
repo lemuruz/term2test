@@ -11,11 +11,11 @@
         {% csrf_token %}
         {% for choice in choices %}
             <label>
-                <input type="radio" name="choice" value="{{ choice.name }}">
+                <input type="radio" name="choice" value="{{ choice.name }}" id = "{{ choice.name }}">
                 {{ choice.name }}
             </label><br>
         {% endfor %}
-        <button type="submit">Submit Vote</button>
+        <button type="submit" id = "Submit Vote">Submit Vote</button>
     </form>
 </body>
 </html>
