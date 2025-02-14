@@ -1,14 +1,15 @@
 from django.db import models
 
-class polls(models.Model):
-    Pname = models.CharField(max_length=20, unique=True)
-    choice = models.Choices(value=1,names=models.CharField)
+class Poll(models.Model):
+    name = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.name
-    
 
-class choice(models.Model):
-    Cname = models.CharField(max_length=20, unique=True)
-    count = models.IntegerField()
+class Choice(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="choices")
+    name = models.CharField(max_length=50) 
+    vote_count = models.IntegerField(default=0) 
 
+    def __str__(self):
+        return f"{self.name} ({self.vote_count} votes)"

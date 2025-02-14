@@ -7,9 +7,11 @@
 </head>
 <body>
     {% if polls %}
+        <ul>
         {% for poll in polls %}
-            <a herf = "" id = {poll}>{poll}</a>
+            <a href = "{% url 'mypoll:votepage' poll.id %}" id = {poll.name}>{{poll.id}}. {{poll.name}}</a>
         {% endfor%}
+        </ul>
     {% else %}
         <p>No Poll Avalable</p>
     {% endif %}
