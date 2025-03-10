@@ -12,4 +12,4 @@ class Choice(models.Model):
     vote_count = models.IntegerField(default=0) 
 
     def __str__(self):
-        return f"{self.name} ({self.vote_count} votes)"
+        return f"Q : {self.poll.name} - A : {self.name} ({self.vote_count} votes)"

@@ -5,7 +5,29 @@ from django.contrib import messages
 from .models import Choice,Poll
 def index(request):
     polls = Poll.objects.all()
-    return render(request,"mypoll/poll_index.html",{'polls' : polls})
+
+    classify = pollclassify(polls)
+
+    return render(request,"mypoll/poll_index.html",{'normalPoll' : classify[0],
+                                                    'warmPoll' : classify[1],
+                                                    'hotPoll' : classify[2]})
+def pollclassify(polls):
+    warmPoll = []
+    hotPoll = []
+    normalPoll = []
+    for poll in polls:
+        choices = Choice.objects.filter(poll=poll)
+        sumOfVote = []
+        for choice in choices:
+            sumOfVote.append(int(choice.vote_count))
+        if sum(sumOfVote) >= 50:
+            hotPoll.append(poll)
+        elif sum(sumOfVote) >= 10:
+            warmPoll.append(poll)
+        else:
+            normalPoll.append(poll)
+        
+    return [normalPoll,warmPoll,hotPoll,]
 
 def vote_page(request,poll_id):
     poll = get_object_or_404(Poll, id=poll_id)
@@ -25,15 +47,7 @@ def vote(request):
 def result(request,poll_id):
     poll = get_object_or_404(Poll, id=poll_id)
     choices = Choice.objects.filter(poll=poll)
-    if poll_id == 2:
-        if choices[0].vote_count - choices[1].vote_count >= 50:
-            result_ = 'yes it is hot'
-        else:
-            result_ = "no it isn't hot"
-        return render(request,"mypoll/isithot_result.html",{'poll' : poll,
-                                                    'choices' : choices,
-                                                    'result' : result_})
+    
 
-    else:
-        return render(request,"mypoll/poll_result.html",{'poll' : poll,
-                                                    'choices' : choices})
+    return render(request,"mypoll/poll_result.html",{'poll' : poll,
+                                                'choices' : choices})

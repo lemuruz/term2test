@@ -32,3 +32,28 @@ class PollViewTest(TestCase):
         response = self.client.get(reverse('mypoll:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "test poll")
+
+class PollClassifyTest(TestCase):
+    def setUp(self):
+        self.poll1 = Poll.objects.create(name="Poll 1")
+        self.poll2 = Poll.objects.create(name="Poll 2")
+        self.poll3 = Poll.objects.create(name="Poll 3")
+        
+        Choice.objects.create(poll=self.poll1, name="Choice A", vote_count=5)
+        Choice.objects.create(poll=self.poll1, name="Choice B", vote_count=3)
+        
+        Choice.objects.create(poll=self.poll2, name="Choice C", vote_count=20)
+        Choice.objects.create(poll=self.poll2, name="Choice D", vote_count=15)
+        
+        Choice.objects.create(poll=self.poll3, name="Choice E", vote_count=30)
+        Choice.objects.create(poll=self.poll3, name="Choice F", vote_count=40)
+    
+    def test_poll_classification(self):
+        from mypoll.views import pollclassify
+        
+        polls = Poll.objects.all()
+        normalPoll, warmPoll, hotPoll = pollclassify(polls)
+        
+        self.assertIn(self.poll1, normalPoll)
+        self.assertIn(self.poll2, warmPoll)
+        self.assertIn(self.poll3, hotPoll)

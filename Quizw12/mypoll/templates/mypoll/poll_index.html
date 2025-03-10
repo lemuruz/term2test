@@ -6,14 +6,20 @@
     <title>Polls</title>
 </head>
 <body>
-    {% if polls %}
+    {% if hotPoll or warmPoll or normalPoll %}
         <ul>
-        {% for poll in polls %}
-            <a href = "{% url 'mypoll:votepage' poll.id %}" id = "{{ poll.name }}">{{poll.id}}. {{poll.name}}</a>
-        {% endfor%}
+            {% for hpoll in hotPoll %}
+                <li><a href="{% url 'mypoll:votepage' hpoll.id %}" id="{{ hpoll.name }}"> [🔥 HOT] {{ hpoll.name }}</a></li>
+            {% endfor %}
+            {% for wpoll in warmPoll %}
+                <li><a href="{% url 'mypoll:votepage' wpoll.id %}" id="{{ wpoll.name }}">[🔼 WARM] {{ wpoll.name }}</a></li>
+            {% endfor %}
+            {% for npoll in normalPoll %}
+                <li><a href="{% url 'mypoll:votepage' npoll.id %}" id="{{ npoll.name }}">{{ npoll.name }}</a></li>
+            {% endfor %}
         </ul>
     {% else %}
-        <p>No Poll Avalable</p>
+        <p>No Poll Available</p>
     {% endif %}
 </body>
 </html>
