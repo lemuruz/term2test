@@ -37,3 +37,60 @@ class testUserPlayPoll(StaticLiveServerTestCase):
         dogScore = self.browser.find_element(By.ID, "หมา")
         self.assertEqual(catScore.text, "แมว (10)")
         self.assertEqual(dogScore.text, "หมา (8)")
+
+class test_warm_or_hot(StaticLiveServerTestCase):
+    def setUp(self):
+        
+        self.poll = Poll.objects.create(name="is it hot")
+        self.choice1 = Choice.objects.create(poll=self.poll, name="yes", vote_count=50)
+        self.choice2 = Choice.objects.create(poll=self.poll, name="no", vote_count=0)
+
+        self.browser = webdriver.Chrome()
+    def tearDown(self):
+        self.browser.quit()
+
+    def test_for_warm(self):
+
+        self.browser.get(self.live_server_url)
+
+        is_it_hot = self.browser.find_element(By.LINK_TEXT, "2. is it hot")
+        is_it_hot.click()
+
+        yes = self.browser.find_element(By.ID, "yes")
+        no = self.browser.find_element(By.ID, "no")
+        yes.is_displayed()
+        no.is_displayed()
+
+        no.click()
+        self.browser.find_element(By.ID, "Submit Vote").click()
+
+        result = self.browser.find_element(By.ID, "result")
+        self.assertEqual(result.text, "no it isn't hot")
+
+
+        catScore = self.browser.find_element(By.ID, "yes")
+        dogScore = self.browser.find_element(By.ID, "no")
+        self.assertEqual(catScore.text, "yes (50)")
+        self.assertEqual(dogScore.text, "no (1)")
+
+        self.browser.find_element(By.ID, "homebtn").click()
+# -------------------------------------------------------------------------------------------------------
+        is_it_hot = self.browser.find_element(By.LINK_TEXT, "2. is it hot")
+        is_it_hot.click()
+
+        yes = self.browser.find_element(By.ID, "yes")
+        no = self.browser.find_element(By.ID, "no")
+        yes.is_displayed()
+        no.is_displayed()
+
+        yes.click()
+        self.browser.find_element(By.ID, "Submit Vote").click()
+
+        result = self.browser.find_element(By.ID, "result")
+        self.assertEqual(result.text, "yes it is hot")
+
+
+        catScore = self.browser.find_element(By.ID, "yes")
+        dogScore = self.browser.find_element(By.ID, "no")
+        self.assertEqual(catScore.text, "yes (51)")
+        self.assertEqual(dogScore.text, "no (1)")
