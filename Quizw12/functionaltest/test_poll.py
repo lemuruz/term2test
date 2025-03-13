@@ -154,17 +154,9 @@ class testPrivatePolls(StaticLiveServerTestCase):
 # ให้ผู้ใช้ชื่อ ปาร์ค
 
 # ปาร์คต้องการเข้าถึง private poll 
-# ปาร์ครู้ชื่อและรหัสผ่านของ private poll ที่ปาร์คต้องการเข้าถึง
+# ปาร์ครู้codeของ private poll ที่ปาร์คต้องการเข้าถึง
 # ปาร์คกด ปุ่ม/ลิงค์ access private poll
-# ปาร์กกรอกชื่อและรหัสของ private poll
-# ปาร์คเห็นหัวข้อ "have you cry before" และตัวเลื่อก "yes" กับ "no"
-# ปาร์คตอบ "yes"
-# ปาร์คเห็นผลการ vote "yes" : 20 "no" : 6ให้ผู้ใช้ชื่อ ปาร์ค
-
-# ปาร์คต้องการเข้าถึง private poll 
-# ปาร์ครู้ชื่อและรหัสผ่านของ private poll ที่ปาร์คต้องการเข้าถึง
-# ปาร์คกด ปุ่ม/ลิงค์ access private poll
-# ปาร์กกรอกชื่อและรหัสของ private poll
+# ปาร์กกรอกcode private poll ex.hycbf7@$68
 # ปาร์คเห็นหัวข้อ "have you cry before" และตัวเลื่อก "yes" กับ "no"
 # ปาร์คตอบ "yes"
 # ปาร์คเห็นผลการ vote "yes" : 20 "no" : 6
