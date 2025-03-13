@@ -6,6 +6,7 @@
     <title>Polls</title>
 </head>
 <body>
+    <h>{{ pageHead }}</h>
     {% if hotPoll or warmPoll or normalPoll %}
         <ul>
             {% for hpoll in hotPoll %}

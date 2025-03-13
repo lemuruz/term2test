@@ -31,7 +31,7 @@ class testUserPlayPoll(StaticLiveServerTestCase):
         dogBtn = self.browser.find_element(By.ID, "หมา")
         catBtn.is_displayed()
         dogBtn.is_displayed()
-        time.sleep(1)
+        time.sleep(0.5)
         # ปาร์คกด หมา และกด submit
         dogBtn.click()
         self.browser.find_element(By.ID, "Submit Vote").click()
@@ -40,7 +40,7 @@ class testUserPlayPoll(StaticLiveServerTestCase):
         dogScore = self.browser.find_element(By.ID, "หมา")
         self.assertEqual(catScore.text, "แมว (1)")
         self.assertEqual(dogScore.text, "หมา (3)")
-        time.sleep(1)
+        time.sleep(0.5)
 
 class testHotAndWarm(StaticLiveServerTestCase):
     def setUp(self):    
@@ -96,3 +96,56 @@ class testHotAndWarm(StaticLiveServerTestCase):
             # Navigate back to home page
             home_button = self.browser.find_element(By.TAG_NAME, "button")
             home_button.click()
+
+class testPrivatePolls(StaticLiveServerTestCase):
+    def setUp(self):    
+        self.poll_private = Poll.objects.create(name="private Poll",private = True)
+        self.poll_normal = Poll.objects.create(name="Normal Poll")
+        
+        self.choice1 = Choice.objects.create(poll=self.poll_private, name="Choice1", vote_count=53)
+        self.choice2 = Choice.objects.create(poll=self.poll_normal, name="Choice2", vote_count=10)
+
+        self.browser = webdriver.Chrome()
+
+    def tearDown(self):
+        self.browser.quit()
+    
+    def test_private_and_normal_poll(self):
+        self.browser.get(self.live_server_url)
+        
+        self.assertIn("All Polls", self.browser.page_source)
+        self.assertIn("Normal Poll", self.browser.page_source)
+        
+        normalpoll_link = self.browser.find_element(By.LINK_TEXT, "[🔼 WARM] Normal Poll")
+        normalpoll_link.click()
+
+
+        choice_button = self.browser.find_element(By.ID, "Choice2")
+        choice_button.click()
+
+        self.browser.find_element(By.ID, "Submit Vote").click()
+        
+        choice_label = self.browser.find_element(By.ID, "Choice2")
+        vote_count = int(choice_label.text.split("(")[1].split(")")[0])
+            
+        self.assertEqual(vote_count,11)
+
+        home_button = self.browser.find_element(By.TAG_NAME, "button")
+        home_button.click()
+#-----------------------------------------------------------------------------------------------
+        self.browser.get(f"{self.live_server_url}/private/")
+
+        self.assertIn("Private Polls", self.browser.page_source)
+        self.assertIn("[🔥 HOT] private Poll", self.browser.page_source)
+        
+        normalpoll_link = self.browser.find_element(By.LINK_TEXT, "[🔥 HOT] private Poll")
+        normalpoll_link.click()
+
+        choice_button = self.browser.find_element(By.ID, "Choice1")
+        choice_button.click()
+        self.browser.find_element(By.ID, "Submit Vote").click()
+
+        choice_label = self.browser.find_element(By.ID, "Choice1")
+        vote_count = int(choice_label.text.split("(")[1].split(")")[0])
+            
+        self.assertEqual(vote_count,54)
