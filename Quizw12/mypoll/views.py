@@ -45,8 +45,7 @@ def vote_page(request,poll_id):
     poll = get_object_or_404(Poll, id=poll_id)
     choices = Choice.objects.filter(poll=poll)
     return render(request,"mypoll/poll_choose.html",{'poll' : poll,
-                                                    'choices' : choices,
-                                                    'poll_id' : poll_id})
+                                                    'choices' : choices,})
 
 def vote(request):
     if request.method == "POST":

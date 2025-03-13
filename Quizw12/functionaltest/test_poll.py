@@ -31,7 +31,7 @@ class testUserPlayPoll(StaticLiveServerTestCase):
         dogBtn = self.browser.find_element(By.ID, "หมา")
         catBtn.is_displayed()
         dogBtn.is_displayed()
-        time.sleep(0.5)
+
         # ปาร์คกด หมา และกด submit
         dogBtn.click()
         self.browser.find_element(By.ID, "Submit Vote").click()
@@ -40,7 +40,7 @@ class testUserPlayPoll(StaticLiveServerTestCase):
         dogScore = self.browser.find_element(By.ID, "หมา")
         self.assertEqual(catScore.text, "แมว (1)")
         self.assertEqual(dogScore.text, "หมา (3)")
-        time.sleep(0.5)
+
 
 class testHotAndWarm(StaticLiveServerTestCase):
     def setUp(self):    
@@ -66,12 +66,12 @@ class testHotAndWarm(StaticLiveServerTestCase):
         self.assertIn("Normal Poll", self.browser.page_source)
         
         # Click and vote for each category
-        time.sleep(1)
+
         for poll_name in ["[🔥 HOT] Hot Poll", "[🔼 WARM] Warm Poll", "Normal Poll"]:
             poll_link = self.browser.find_element(By.LINK_TEXT, poll_name)
             poll_link.click()
             
-            time.sleep(1)
+
             match poll_name:
                 case "[🔥 HOT] Hot Poll":choice = "Choice1"
                 case "[🔼 WARM] Warm Poll":choice = "Choice2"
@@ -80,7 +80,7 @@ class testHotAndWarm(StaticLiveServerTestCase):
             choice_button.click()
             
             self.browser.find_element(By.ID, "Submit Vote").click()
-            time.sleep(1)
+        
             # Check if vote count is updated correctly
         
             choice_label = self.browser.find_element(By.ID, choice)
@@ -100,7 +100,7 @@ class testHotAndWarm(StaticLiveServerTestCase):
 class testPrivatePolls(StaticLiveServerTestCase):
     def setUp(self):    
         self.poll_private = Poll.objects.create(name="private Poll",private = True)
-        self.poll_normal = Poll.objects.create(name="Normal Poll")
+        self.poll_normal = Poll.objects.create(name="Normal Poll",private = False)
         
         self.choice1 = Choice.objects.create(poll=self.poll_private, name="Choice1", vote_count=53)
         self.choice2 = Choice.objects.create(poll=self.poll_normal, name="Choice2", vote_count=10)
@@ -149,3 +149,22 @@ class testPrivatePolls(StaticLiveServerTestCase):
         vote_count = int(choice_label.text.split("(")[1].split(")")[0])
             
         self.assertEqual(vote_count,54)
+
+
+# ให้ผู้ใช้ชื่อ ปาร์ค
+
+# ปาร์คต้องการเข้าถึง private poll 
+# ปาร์ครู้ชื่อและรหัสผ่านของ private poll ที่ปาร์คต้องการเข้าถึง
+# ปาร์คกด ปุ่ม/ลิงค์ access private poll
+# ปาร์กกรอกชื่อและรหัสของ private poll
+# ปาร์คเห็นหัวข้อ "have you cry before" และตัวเลื่อก "yes" กับ "no"
+# ปาร์คตอบ "yes"
+# ปาร์คเห็นผลการ vote "yes" : 20 "no" : 6ให้ผู้ใช้ชื่อ ปาร์ค
+
+# ปาร์คต้องการเข้าถึง private poll 
+# ปาร์ครู้ชื่อและรหัสผ่านของ private poll ที่ปาร์คต้องการเข้าถึง
+# ปาร์คกด ปุ่ม/ลิงค์ access private poll
+# ปาร์กกรอกชื่อและรหัสของ private poll
+# ปาร์คเห็นหัวข้อ "have you cry before" และตัวเลื่อก "yes" กับ "no"
+# ปาร์คตอบ "yes"
+# ปาร์คเห็นผลการ vote "yes" : 20 "no" : 6
